@@ -3,7 +3,7 @@
 0-gather_data_from_an_API.py
 
 Fetches TODO list progress for a given employee ID from the JSONPlaceholder REST API
-and displays completed tasks in a specific format.
+and displays completed tasks in the required format.
 """
 
 import requests
@@ -26,15 +26,13 @@ def fetch_employee_todos(employee_id):
 
     # Fetch employee information
     user_response = requests.get(user_url)
-    if user_response.status_code != 200:
-        sys.exit("Failed to fetch employee data")
+    user_response.raise_for_status()
     user_data = user_response.json()
     employee_name = user_data.get("name")
 
     # Fetch TODO list
     todos_response = requests.get(todos_url)
-    if todos_response.status_code != 200:
-        sys.exit("Failed to fetch TODO list")
+    todos_response.raise_for_status()
     todos = todos_response.json()
 
     done_tasks = [task.get("title") for task in todos if task.get("completed")]
