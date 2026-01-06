@@ -24,19 +24,18 @@ def fetch_employee_and_todos(employee_id):
     """
     base_url = "https://jsonplaceholder.typicode.com"
     user_url = f"{base_url}/users/{employee_id}"
-    todos_url = f"{base_url}/todos?userId={employee_id}"
+    todos_url = f"{base_url}/todos"
 
     # Fetch employee information
     user_resp = requests.get(user_url)
     user_resp.raise_for_status()
     user = user_resp.json()
 
-    # Ensure we use the ID and username from API response
     user_id = user.get("id")
     username = user.get("username")
 
-    # Fetch all tasks for this user
-    todos_resp = requests.get(todos_url)
+    # Fetch all tasks for this user (owned tasks)
+    todos_resp = requests.get(todos_url, params={"userId": employee_id})
     todos_resp.raise_for_status()
     todos = todos_resp.json()
 
@@ -57,10 +56,10 @@ def export_to_csv(user_id, username, todos):
         writer = csv.writer(f, quoting=csv.QUOTE_ALL)
         for task in todos:
             writer.writerow([
-                user_id,
-                username,
-                task.get("completed"),
-                task.get("title")
+                str(user_id),
+                str(username),
+                str(task.get("completed")),
+                str(task.get("title"))
             ])
 
 
@@ -76,7 +75,6 @@ def main():
 
     user_id, username, todos = fetch_employee_and_todos(employee_id)
 
-    # Guard against missing user
     if user_id is None or username is None:
         sys.exit("Employee not found")
 
