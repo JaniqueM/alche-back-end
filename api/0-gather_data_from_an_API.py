@@ -2,12 +2,12 @@
 """
 0-gather_data_from_an_API.py
 
-Fetches TODO list progress for a given employee ID from the JSONPlaceholder REST API
-and displays completed tasks in the required format.
+Fetches TODO list progress for a given employee ID from the JSONPlaceholder
+REST API and displays completed tasks in the required format.
 """
 
-import sys
 import requests
+import sys
 
 
 def fetch_employee_todos(employee_id):
@@ -35,14 +35,14 @@ def fetch_employee_todos(employee_id):
     todos_response.raise_for_status()
     todos = todos_response.json()
 
-    done_tasks = [task.get("title") for task in todos if task.get("completed")]
+    done_tasks = [t.get("title") for t in todos if t.get("completed")]
     total_tasks = len(todos)
 
     return employee_name, done_tasks, total_tasks
 
 
 def main():
-    """Main function that parses arguments and prints TODO list progress."""
+    """Parse arguments and print TODO list progress."""
     if len(sys.argv) != 2:
         sys.exit(f"Usage: {sys.argv[0]} <employee_id>")
 
@@ -52,7 +52,11 @@ def main():
         sys.exit("Employee ID must be an integer")
 
     employee_name, done_tasks, total_tasks = fetch_employee_todos(employee_id)
-    print(f"Employee {employee_name} is done with tasks({len(done_tasks)}/{total_tasks}):")
+    header = (
+        f"Employee {employee_name} is done with tasks("
+        f"{len(done_tasks)}/{total_tasks}):"
+    )
+    print(header)
     for task in done_tasks:
         print(f"\t {task}")
 
