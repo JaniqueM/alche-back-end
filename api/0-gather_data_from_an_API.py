@@ -6,8 +6,8 @@ Fetches TODO list progress for a given employee ID from the JSONPlaceholder REST
 and displays completed tasks in the required format.
 """
 
-import requests
 import sys
+import requests
 
 
 def fetch_employee_todos(employee_id):
